@@ -107,7 +107,7 @@
       <p>Sorted alphabetically &mdash; ignoring A, An, The</p>
     </header>
     <hr class="rule"/>
-    <ul id="band"></ul>
+    <ul id="bands"></ul>
     <footer>
       <span id="count"></span> artists listed
     </footer>
@@ -127,7 +127,7 @@
 
     const sorted = [...bands].sort((a, b) => sortKey(a).localeCompare(sortKey(b)));
 
-    const ul = document.getElementById('band');
+    const ul = document.getElementById('bands');
     sorted.forEach((band, i) => {
       const li = document.createElement('li');
       li.textContent = band;
