@@ -1,58 +1,141 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Alphabetical Article Sorter</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Alphabetical Band Sorter</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=Lato:wght@300;400&display=swap" rel="stylesheet"/>
   <style>
-    body {
-      font-family: Arial, sans-serif;
-      padding: 20px;
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #f5f2ec;
+      --text: #2a2a2a;
+      --muted: #888;
+      --accent: #5c6b4e;
+      --rule: #d4cfc6;
+      --card-bg: #fefefe;
     }
-    ul {
-      list-style-type: disc;
+
+    body {
+      background-color: var(--bg);
+      color: var(--text);
+      font-family: 'Lato', sans-serif;
+      font-weight: 300;
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      padding: 60px 20px;
+    }
+
+    .container {
+      max-width: 520px;
+      width: 100%;
+    }
+
+    header {
+      margin-bottom: 48px;
+    }
+
+    header h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: 2rem;
+      font-weight: 600;
+      letter-spacing: 0.01em;
+      line-height: 1.2;
+      color: var(--text);
+    }
+
+    header p {
+      margin-top: 8px;
+      font-size: 0.8rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    hr.rule {
+      border: none;
+      border-top: 1px solid var(--rule);
+      margin: 20px 0 32px;
+    }
+
+    ul#band {
+      list-style: none;
+    }
+
+    ul#band li {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding: 13px 0;
+      border-bottom: 1px solid var(--rule);
+      font-size: 0.95rem;
+      font-weight: 400;
+      letter-spacing: 0.02em;
+      color: var(--text);
+      opacity: 0;
+      transform: translateY(6px);
+      animation: fadeUp 0.35s ease forwards;
+    }
+
+    ul#band li::before {
+      content: '';
+      display: inline-block;
+      width: 6px;
+      height: 6px;
+      background-color: var(--accent);
+      flex-shrink: 0;
+    }
+
+    @keyframes fadeUp {
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    footer {
+      margin-top: 32px;
+      font-size: 0.75rem;
+      color: var(--muted);
+      letter-spacing: 0.08em;
     }
   </style>
 </head>
 <body>
-
-  <h2>Band List (Sorted Alphabetically)</h2>
-  <ul id="band"></ul>
+  <div class="container">
+    <header>
+      <h1>Band Directory</h1>
+      <p>Sorted alphabetically &mdash; ignoring A, An, The</p>
+    </header>
+    <hr class="rule"/>
+    <ul id="band"></ul>
+    <footer>
+      <span id="count"></span> artists listed
+    </footer>
+  </div>
 
   <script>
     const bands = [
-      'The Plot in You',
-      'The Devil Wears Prada',
-      'Pierce the Veil',
-      'Norma Jean',
-      'The Bled',
-      'Say Anything',
-      'The Midway State',
-      'We Came as Romans',
-      'Counterparts',
-      'Oh, Sleeper',
-      'A Skylit Drive',
-      'Anywhere But Here',
-      'An Old Dog'
+      'The Plot in You', 'The Devil Wears Prada', 'Pierce the Veil',
+      'Norma Jean', 'The Bled', 'Say Anything', 'The Midway State',
+      'We Came as Romans', 'Counterparts', 'Oh, Sleeper',
+      'A Skylit Drive', 'Anywhere But Here', 'An Old Dog'
     ];
 
-    function stripArticle(name) {
-      return name.replace(/^(a |an |the )/i, '').trim();
+    function sortKey(name) {
+      return name.replace(/^(a |an |the )/i, '').trim().toLowerCase();
     }
 
-    const sortedBands = bands.sort((a, b) => {
-      const nameA = stripArticle(a).toLowerCase();
-      const nameB = stripArticle(b).toLowerCase();
-      return nameA.localeCompare(nameB);
-    });
+    const sorted = [...bands].sort((a, b) => sortKey(a).localeCompare(sortKey(b)));
 
-    const ul = document.getElementById("band");
-
-    sortedBands.forEach(band => {
-      const li = document.createElement("li");
+    const ul = document.getElementById('band');
+    sorted.forEach((band, i) => {
+      const li = document.createElement('li');
       li.textContent = band;
+      li.style.animationDelay = `${i * 40}ms`;
       ul.appendChild(li);
     });
-  </script>
 
+    document.getElementById('count').textContent = sorted.length;
+  </script>
 </body>
 </html>
